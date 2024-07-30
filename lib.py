@@ -17,8 +17,8 @@ def split(data=dataset):
     X_train, X_test, y_train, y_test = train_test_split(data['data'],data['target'], random_state=0)
     return X_train, X_test, y_train, y_test
 
-def train(features_set,target_set):
-    clf = KNeighborsClassifier(n_neighbors=3)
+def train(neighbors,features_set,target_set):
+    clf = KNeighborsClassifier(n_neighbors=neighbors)
     clf.fit(features_set,target_set)
     return clf
 

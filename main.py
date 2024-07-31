@@ -1,12 +1,13 @@
-import lib
+from KNNModel import KNNModel
 import numpy as np
 
+ml_model = KNNModel()
+labels = ml_model.dataset.target_names
 stats = {} # stats = { '1':{'train':{'benign':x,'malignant':y, 'score':90%},'test':{'score':91%,etc.}}
 def doStatistics(n_neighbors,train_predicted,train_score,test_predicted,test_score):
-    
-    train_stats = {n: v for n, v in zip(lib.dataset.target_names, np.bincount(train_predicted))}
+    train_stats = {n: v for n, v in zip(labels, np.bincount(train_predicted))}
     train_stats['score']=train_score
-    test_stats = {n: v for n, v in zip(lib.dataset.target_names, np.bincount(test_predicted))}
+    test_stats = {n: v for n, v in zip(labels, np.bincount(test_predicted))}
     test_stats['score']=test_score
     stats[n_neighbors] = {}
     stats[n_neighbors]['train'] = train_stats
@@ -22,23 +23,23 @@ def report(stats,model_number):
         print(line)
 
 if __name__ == "__main__":
-    lib.desc()
-    X_train,X_test,y_train,y_test = lib.split()
+    ml_model.desc()
+    X_train,X_test,y_train,y_test = ml_model.split()
     neighbor_settings = range(1,11,1)
     training_accuracy = []
     testing_accuracy = []
     
     for n in neighbor_settings:
         # Build the model
-        model = lib.train(n,X_train,y_train)
+        ml_model.train(n,X_train,y_train)
         # Predict
-        train_pred = lib.pred(X_train,model)
-        training_score = round(lib.evaluate(X_train,y_train,model)*100,2)
+        train_pred = ml_model.pred(X_train)
+        training_score = ml_model.evaluate(X_train,y_train)
         training_accuracy.append(training_score)
         
         # Evaluate
-        test_pred = lib.pred(X_test,model)
-        testing_score = round(lib.evaluate(X_test,y_test,model)*100,2)
+        test_pred = ml_model.pred(X_test)
+        testing_score = ml_model.evaluate(X_test,y_test)
         testing_accuracy.append(testing_score)
 
         doStatistics(n,train_pred,training_score,test_pred,testing_score)

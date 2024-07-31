@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split 
 from sklearn.neighbors import KNeighborsClassifier
-
+from sklearn.metrics import accuracy_score
 class KNNModel:
     def __init__(self):
         self.dataset = load_breast_cancer()
@@ -44,9 +44,10 @@ class KNNModel:
         '''
         return self.classifer.predict(dataset)
 
-    def evaluate(self,evaluating_set,true_labels):
+    def evaluate(self,true_labels,predicted_set):
         '''
         This function is to compare the predicted labels with the actual labels and calculate the accuracy score
         '''
-        return round(self.classifer.score(evaluating_set,true_labels)*100,2)
+        score = accuracy_score(true_labels,predicted_set)
+        return round(score*100,2)
 

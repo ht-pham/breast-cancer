@@ -34,12 +34,12 @@ if __name__ == "__main__":
         ml_model.train(n,X_train,y_train)
         # Predict
         train_pred = ml_model.pred(X_train)
-        training_score = ml_model.evaluate(X_train,y_train)
+        training_score = ml_model.evaluate(y_train,train_pred)
         training_accuracy.append(training_score)
         
         # Evaluate
         test_pred = ml_model.pred(X_test)
-        testing_score = ml_model.evaluate(X_test,y_test)
+        testing_score = ml_model.evaluate(y_test,test_pred)
         testing_accuracy.append(testing_score)
 
         doStatistics(n,train_pred,training_score,test_pred,testing_score)

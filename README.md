@@ -16,4 +16,7 @@ The dataset is from *sk-learn*'s dataset.
 As of now, no method is in used
 
 ## ML algorithms in use
-    1. K-Nearest Neighbors
+    1. **K-Nearest Neighbors** with number of neighbors from 1 to 10 (Best: 8-nn)
+    2. **Suport Vector Machine** with 4 different kernel functions - linear, poly, rbf, and sigmoid (Best: linear)
+
+    Between kNN and SVM, linear SVM is a better ML approach to this problem.

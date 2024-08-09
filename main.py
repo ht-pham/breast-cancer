@@ -97,7 +97,7 @@ if __name__ == "__main__":
     # Best model is defined as the one either with almost similiar training score and testing score 
     # or simply best accuracies in both set
     best_model_index = findBestModel(training_accuracy,testing_accuracy)
-    print("Best kNN Model is",str(best_model_index+1)+"-nearest-neighbor with"
+    print("Best kNN Model is",str(best_model_index+1)+"-nearest neighbors with"
           ,training_accuracy[best_model_index],"% of accuracy in training and"
           ,testing_accuracy[best_model_index],"% of accuracy in testing")
     print('*'*100)

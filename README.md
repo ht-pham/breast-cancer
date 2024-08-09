@@ -20,3 +20,7 @@ As of now, no method is in used
     2. **Suport Vector Machine** with 4 different kernel functions - linear, poly, rbf, and sigmoid (Best: linear)
 
     Between kNN and SVM, linear SVM is a better ML approach to this problem.
+    | Best Model                          | Training Accuracy % | Testing Accuracy % |
+    | :-----------------------------------| :-----------------: | :----------------: |
+    | 8-Nearest Neighbors                 |       94.13 %       |       94.41%       |
+    | Linear Support Vector Machine       |       94.13 %       |       94.41%       |

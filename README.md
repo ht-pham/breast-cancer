@@ -19,9 +19,13 @@ As of now, no method is in used
 
 1. **K-Nearest Neighbors** with number of neighbors from 1 to 10 (Best: 8-nn)
 2. **Suport Vector Machine** with 4 different kernel functions - linear, poly, rbf, and sigmoid (Best: linear)
+3. **Decision Tree** with unlimited, 10 or less deep (Best: 1-deep)
 
-Between kNN and SVM, linear SVM is a better ML approach to this problem.
+> My hypothesis of the best model is the one whose training's accuracy score and whose testing's accuracy score are the best scores among the other modified model versions and the difference between these scores is the smallest.
+
+So far, linear SVM is the best ML approach to this categorical problem among 3 ML approaches.
 | Best Model                          | Training Accuracy % | Testing Accuracy % |
 | :-----------------------------------| :-----------------: | :----------------: |
 | 8-Nearest Neighbors                 |       94.13 %       |       94.41%       |
 | Linear Support Vector Machine       |       96.71 %       |       95.8 %       |
+| Decision Tree                       |       92.25 %       |       92.31 %      |

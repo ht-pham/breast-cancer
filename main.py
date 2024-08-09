@@ -3,11 +3,13 @@ import numpy as np
 
 from KNNModel import KNNModel
 from SVMModel import SVMModel
+from DecisionTree import Tree
 
 knn = KNNModel()
 svm = SVMModel()
-labels = knn.dataset.target_names
+tree = Tree()
 
+labels = knn.dataset.target_names
 def doStatistics(params,train_predicted,train_score,test_predicted,test_score):
     stats = {} #e.g. stats = { '1':{'train':{'benign':x,'malignant':y, 'score':90%},'test':{'score':91%,etc.}}
     train_stats = {n: v for n, v in zip(labels, np.bincount(train_predicted))}
@@ -24,8 +26,10 @@ def report(stats,ml_model,model_factor):
     report_lines.append("ML Model: "+ml_model)
     if ml_model == "K-Nearest Neighbor":
         report_lines.append("Number of neighbors: "+ str(model_factor))
-    else:
+    elif ml_model == "Support Vector Machine":
         report_lines.append("Kernel Function: "+ str(model_factor))
+    else:
+        report_lines.append("Max Depth of the Tree: "+ str(model_factor))
     report_lines.append("\t* Training's prediction counts and score: \n\t\t"+str(stats[model_factor]['train']))
     report_lines.append("\t* Testing's prediction counts and score: \n\t\t"+str(stats[model_factor]['test']))
     report_lines.append("_"*50)
@@ -53,12 +57,12 @@ if __name__ == "__main__":
     ### This is kNN model
     print('*'*100)
     knn.desc()
-    print('*','_'*30,"k-nearest-neighbor",'_'*30,'*')
-    X_train,X_test,y_train,y_test = knn.split()
+    print('*','_'*30,"k-nearest neighbors",'_'*30,'*')
+    X_train,X_test,y_train,y_test = knn.split() 
     neighbor_settings = range(1,11,1)
     training_accuracy = []
     testing_accuracy = []
-    comp_stats = []
+    
     for n in neighbor_settings:
         # Build the model
         print("* Start building & training")
@@ -150,12 +154,92 @@ if __name__ == "__main__":
         #Report
         stats = doStatistics(kernel,train_pred,svm.evaluation['train']['score'],test_pred,svm.evaluation['test']['score'])
         report(stats,"Support Vector Machine",kernel)
-    
+    # Best model is defined as the one either with almost similiar training score and testing score 
+    # or simply best accuracies in both set
     best_model = findBestModel(training_score,testing_score)
     kernel = kernel_settings[best_model]
     print("Best SVM model is SVM with kernel function as",kernel
           ,"with ",training_score[best_model],"% accuracy in training",
             " and with ",testing_score[best_model],"% accuracy in testing")
+    
+    ### Decision Tree Classifier
+    print('*','_'*30,"Decision Tree",'_'*30,'*')
+    X_train,X_test,y_train,y_test = tree.split()
+    
+    accuracy_stats = {}
+    print("Doing overfitting case i.e. infinite depth")
+    print('* Start training ')
+    start = time()
+    tree.train(None,X_train,y_train)
+    end = time()
+    print("Finishing training after {:.8f}".format(end-start))
+    print("* Predicting with sample sets")
+    start = time()
+    train_pred = tree.pred(X_train)
+    end = time()
+    print("... training set: done within {:.8f}".format(end-start))
+    start = time()
+    test_pred = tree.pred(X_test)
+    end = time()
+    print("... testing set: done within {:.8f}".format(end-start))
+
+    accuracy_stats.update({'Infinite':{'train':tree.evaluate('train acc',y_train,train_pred),
+                              'test':tree.evaluate('test acc',y_test,test_pred)}})
+    
+    depth_settings = range(10,0,-1) # Descending because of max depth from infinite to 1
+    for i in depth_settings:
+        #Train
+        start = time()
+        tree.train(i,X_train,y_train)
+        print("* Finished training model with {}-depth within {:.8f}s".format(i,time()-start))
+        print("Doing some predictions")
+
+        #Predict
+        print("* Predicting with sample sets")
+        start = time()
+        train_pred = tree.pred(X_train)
+        end = time()
+        print("... training set: done within {:.8f}".format(end-start))
+        #Test
+        start = time()
+        test_pred = tree.pred(X_test)
+        end = time()
+        print("... testing set: done within {:.8f}".format(end-start))
+
+        #Evaluate
+        train_score = tree.evaluate('train acc',y_train,train_pred)
+        test_score = tree.evaluate('test acc',y_test,test_pred)
+        stats = doStatistics(i,train_pred,train_score,test_pred,test_score)
+        report(stats,"Decision Tree",i)
+
+        accuracy_stats.update({str(i):{'train':train_score,'test':test_score}})
+    
+    training_accuracy = [accuracy_stats['Infinite']['train'],]
+    testing_accuracy = [accuracy_stats['Infinite']['test'],]
+    for k,v in accuracy_stats.items():
+        if k == 'Infinite':
+            continue
+        for l,s in v.items():
+            if l == 'train':
+                training_accuracy.append(s)
+            else:
+                testing_accuracy.append(s)
+
+    best_model_index = findBestModel(training_accuracy,testing_accuracy)
+    if best_model_index == 0:
+        print("Best Decision Tree is a deep rooted Decision Tree"+
+              "with unlimited depth,"+
+              "{:.2f}% accuracy in training, and{:.2f}% accuracy in testing".format(training_accuracy[0],testing_accuracy[0]))
+    else:
+        depth = 11-best_model_index
+        print("Best Decision Tree is Decision Tree with max depth of {},".format(depth))
+        print("{:.2f}% accurate in training, and {:.2f}% accurate in testing".format(accuracy_stats[str(depth)]['train'],accuracy_stats[str(depth)]['test']))
+
+
+
+
+
+
 
 
 

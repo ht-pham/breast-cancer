@@ -43,10 +43,11 @@ def findBestModel(train_acc,test_acc):
         return best_test
     else:
         min_gap = abs(train_acc[0]-test_acc[0])
-        best_model_index = 0
-        for i in range(1,len(train_acc),1):
+        best_model_index = best_test
+        for i in range(0,len(train_acc),1):
             gap = abs(train_acc[i]-test_acc[i])
-            if min_gap > gap:
+            near_best = abs(test_acc[best_test]-test_acc[i])<2.0 and abs(train_acc[best_test]-train_acc[i])<2.0
+            if min_gap > gap and near_best:
                 min_gap = gap
                 best_model_index = i
         return best_model_index

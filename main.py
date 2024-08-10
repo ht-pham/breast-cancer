@@ -1,10 +1,12 @@
+from math import sqrt
+from statistics import mean
 from time import time
 import numpy as np
 
 from KNNModel import KNNModel
 from SVMModel import SVMModel
 from DecisionTree import Tree
-
+from FeaturedData import FeaturedData
 knn = KNNModel()
 svm = SVMModel()
 tree = Tree()
@@ -39,16 +41,19 @@ def report(stats,ml_model,model_factor):
 def findBestModel(train_acc,test_acc):
     best_train = train_acc.index(max(train_acc))
     best_test = test_acc.index(max(test_acc))
-    if best_test == best_train:
+    if best_test == best_train: # ideal case
         return best_test
-    else:
-        min_gap = abs(train_acc[0]-test_acc[0])
-        best_model_index = best_test
+    else: # average case (i.e. no overfitting or underfitting)
+        ave_train = mean(train_acc)
+        ave_test = mean(test_acc)
+        print("Average Train Accuracy: {:.2f}%.".format(ave_train))
+        print("Average Test Accuracy: {:.2f}%.".format(ave_test))
         for i in range(0,len(train_acc),1):
-            gap = abs(train_acc[i]-test_acc[i])
-            near_best = abs(test_acc[best_test]-test_acc[i])<2.0 and abs(train_acc[best_test]-train_acc[i])<2.0
-            if min_gap > gap and near_best:
-                min_gap = gap
+            train_gap = train_acc[i]-ave_train
+            test_gap = test_acc[i]-ave_test
+            ideal_gap1 = train_gap > 1.0 and train_gap < 3.0 # better than ave
+            ideal_gap2 = test_gap > 1.0 and test_gap < 3.0 # better than ave
+            if ideal_gap1 or ideal_gap2 and abs(train_acc[i]-test_acc[i])<1.0:
                 best_model_index = i
         return best_model_index
     
@@ -237,7 +242,114 @@ if __name__ == "__main__":
         print("{:.2f}% accurate in training, and {:.2f}% accurate in testing".format(accuracy_stats[str(depth)]['train'],accuracy_stats[str(depth)]['test']))
 
 
+    #------------------------------------------------------------------------------------#
+    #------------- ML Algorithms with dataset applied feature selection -----------------# 
+    dataset = FeaturedData()
+    #---- Case 1: Drop 20 features
+    dataset.dropFeatures()
+    X_train,X_test,y_train,y_test = dataset.split()
+    # Model 1: k-Nearest Neighbors
+    neighbor_settings = range(1,11,1)
+    training_accuracy = []
+    testing_accuracy = []
+    
+    for n in neighbor_settings:
+        # Build the model
+        print("* Start building & training")
+        start = time()
+        knn.train(n,X_train,y_train)
+        end = time()
+        train_time = end - start
+        print("* Done building & training")
+        # Predict
+        print("* Start predicting against training set")
+        start = time()
+        train_pred = knn.pred(X_train)
+        end = time()
+        pred_time = end - start
+        print("* Done with training stage")
+        training_score = knn.evaluate(y_train,train_pred)
+        training_accuracy.append(training_score)
+        
+        # Evaluate
+        print("* Start evaluating")
+        start = time()
+        test_pred = knn.pred(X_test)
+        end = time()
+        test_time = end - start
+        print("* Done with evaluation")
+        testing_score = knn.evaluate(y_test,test_pred)
+        testing_accuracy.append(testing_score)
 
+        stats = doStatistics(n,train_pred,training_score,test_pred,testing_score)
+        print("* Total elapsed time for building & training the model: {:.8f}".format(train_time))
+        print("* Total elapsed time for testing against the training model: {:.8f}".format(pred_time))
+        print("* Total elapsed time for evaluating the model: {:.8f}\n".format(test_time))
+
+        report(stats,"K-Nearest Neighbor",n)
+        
+    # Best model is defined as the one either with almost similiar training score and testing score 
+    # or simply best accuracies in both set
+    best_model_index = findBestModel(training_accuracy,testing_accuracy)
+    print("Best kNN Model is",str(best_model_index+1)+"-nearest neighbors with"
+          ,training_accuracy[best_model_index],"% of accuracy in training and"
+          ,testing_accuracy[best_model_index],"% of accuracy in testing")
+    print('*'*100)
+
+    #---- Case 1: Drop outliers only
+    dataset = FeaturedData()
+    outliers = ['worst radius','worst texture','worst perimeter','worst area','worst smoothness',
+                'worst compactness','worst concavity','worst concave points','worst symmetry','worst fractal dimension']
+    dataset.dropFeatures(outliers)
+    X_train,X_test,y_train,y_test = dataset.split()
+    # Model 1: k-Nearest Neighbors
+    neighbor_settings = range(1,11,1)
+    training_accuracy = []
+    testing_accuracy = []
+    
+    for n in neighbor_settings:
+        # Build the model
+        print("* Start building & training")
+        start = time()
+        knn.train(n,X_train,y_train)
+        end = time()
+        train_time = end - start
+        print("* Done building & training")
+        # Predict
+        print("* Start predicting against training set")
+        start = time()
+        train_pred = knn.pred(X_train)
+        end = time()
+        pred_time = end - start
+        print("* Done with training stage")
+        training_score = knn.evaluate(y_train,train_pred)
+        training_accuracy.append(training_score)
+        
+        # Evaluate
+        print("* Start evaluating")
+        start = time()
+        test_pred = knn.pred(X_test)
+        end = time()
+        test_time = end - start
+        print("* Done with evaluation")
+        testing_score = knn.evaluate(y_test,test_pred)
+        testing_accuracy.append(testing_score)
+
+        stats = doStatistics(n,train_pred,training_score,test_pred,testing_score)
+        print("* Total elapsed time for building & training the model: {:.8f}".format(train_time))
+        print("* Total elapsed time for testing against the training model: {:.8f}".format(pred_time))
+        print("* Total elapsed time for evaluating the model: {:.8f}\n".format(test_time))
+
+        report(stats,"K-Nearest Neighbor",n)
+        
+    # Best model is defined as the one either with almost similiar training score and testing score 
+    # or simply best accuracies in both set
+    best_model_index = findBestModel(training_accuracy,testing_accuracy)
+    print("Best kNN Model is",str(best_model_index+1)+"-nearest neighbors with"
+          ,training_accuracy[best_model_index],"% of accuracy in training and"
+          ,testing_accuracy[best_model_index],"% of accuracy in testing")
+    print('*'*100)
+   
 
 
 

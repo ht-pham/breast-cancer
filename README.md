@@ -13,7 +13,7 @@ The dataset is from *sk-learn*'s dataset.
     * *benign*: 357
 
 ## Exploratory Data Analysis
-As of 08/09, feature selection has been applied so there are 3 major case study
+As of 08/09, **manual** feature selection has been applied so there are 3 major case study
 1. **Case 1**: No features dropped/removed from training
 2. **Case 2**: Only major features in use, errors and outliers are removed (i.e. 20 features dropped)
 3. **Case 3**: Major features and the error values in use; outliers are removed (i.e. 10 features dropped)
@@ -27,6 +27,7 @@ As of 08/09, feature selection has been applied so there are 3 major case study
 All of these ML algorithms and their variances will be applied to 3 case studies.
 
 > My hypothesis on the best model is the one whose training's accuracy score and whose testing's accuracy score are ones of the best scores among the other modified model versions and the difference between these scores is the smallest.
+
 > My hypothesis on the second best model is the one whose training's accuracy score and whose testing's accuracy score are higher than average accuracy scores (i.e. train accuracy and test accuracy) compared with other varied models within the same ML algorithm approaches and the difference between the two scores is less than 1%.
 
 ## Evaluation

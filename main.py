@@ -2,6 +2,8 @@ from math import sqrt
 from statistics import mean
 from time import time
 import numpy as np
+from report import Report
+rp = Report()
 
 from KNNModel import KNNModel
 from SVMModel import SVMModel
@@ -11,32 +13,6 @@ knn = KNNModel()
 svm = SVMModel()
 tree = Tree()
 
-labels = knn.dataset.target_names
-def doStatistics(params,train_predicted,train_score,test_predicted,test_score):
-    stats = {} #e.g. stats = { '1':{'train':{'benign':x,'malignant':y, 'score':90%},'test':{'score':91%,etc.}}
-    train_stats = {n: v for n, v in zip(labels, np.bincount(train_predicted))}
-    train_stats['score']=train_score
-    test_stats = {n: v for n, v in zip(labels, np.bincount(test_predicted))}
-    test_stats['score']=test_score
-    stats[params] = {}
-    stats[params]['train'] = train_stats
-    stats[params]['test'] = test_stats
-    return stats
-    
-def report(stats,ml_model,model_factor):
-    report_lines = []
-    report_lines.append("ML Model: "+ml_model)
-    if ml_model == "K-Nearest Neighbor":
-        report_lines.append("Number of neighbors: "+ str(model_factor))
-    elif ml_model == "Support Vector Machine":
-        report_lines.append("Kernel Function: "+ str(model_factor))
-    else:
-        report_lines.append("Max Depth of the Tree: "+ str(model_factor))
-    report_lines.append("\t* Training's prediction counts and score: \n\t\t"+str(stats[model_factor]['train']))
-    report_lines.append("\t* Testing's prediction counts and score: \n\t\t"+str(stats[model_factor]['test']))
-    report_lines.append("_"*50)
-    for line in report_lines:
-        print(line)
 
 def findBestModel(train_acc,test_acc):
     best_train = train_acc.index(max(train_acc))
@@ -97,12 +73,12 @@ if __name__ == "__main__":
         testing_score = knn.evaluate(y_test,test_pred)
         testing_accuracy.append(testing_score)
 
-        stats = doStatistics(n,train_pred,training_score,test_pred,testing_score)
+        rp.doStatistics(['knn',n],train_pred,training_score,test_pred,testing_score)
         print("* Total elapsed time for building & training the model: {:.8f}".format(train_time))
         print("* Total elapsed time for testing against the training model: {:.8f}".format(pred_time))
         print("* Total elapsed time for evaluating the model: {:.8f}\n".format(test_time))
 
-        report(stats,"K-Nearest Neighbor",n)
+        rp.printReport("knn",n)
         
     # Best model is defined as the one either with almost similiar training score and testing score 
     # or simply best accuracies in both set
@@ -158,8 +134,8 @@ if __name__ == "__main__":
             'score':svm.evaluation['test']['score']}
         testing_score.append(svm.evaluation['test']['score'])
         #Report
-        stats = doStatistics(kernel,train_pred,svm.evaluation['train']['score'],test_pred,svm.evaluation['test']['score'])
-        report(stats,"Support Vector Machine",kernel)
+        rp.doStatistics(['SVM',kernel],train_pred,svm.evaluation['train']['score'],test_pred,svm.evaluation['test']['score'])
+        rp.printReport("SVM",kernel)
     # Best model is defined as the one either with almost similiar training score and testing score 
     # or simply best accuracies in both set
     best_model = findBestModel(training_score,testing_score)
@@ -215,8 +191,8 @@ if __name__ == "__main__":
         #Evaluate
         train_score = tree.evaluate('train acc',y_train,train_pred)
         test_score = tree.evaluate('test acc',y_test,test_pred)
-        stats = doStatistics(i,train_pred,train_score,test_pred,test_score)
-        report(stats,"Decision Tree",i)
+        rp.doStatistics(['DT',i],train_pred,train_score,test_pred,test_score)
+        rp.printReport("DT",i)
 
         accuracy_stats.update({str(i):{'train':train_score,'test':test_score}})
     
@@ -281,13 +257,12 @@ if __name__ == "__main__":
         testing_score = knn.evaluate(y_test,test_pred)
         testing_accuracy.append(testing_score)
 
-        stats = doStatistics(n,train_pred,training_score,test_pred,testing_score)
+        rp.doStatistics(['knn',n],train_pred,training_score,test_pred,testing_score)
         print("* Total elapsed time for building & training the model: {:.8f}".format(train_time))
         print("* Total elapsed time for testing against the training model: {:.8f}".format(pred_time))
         print("* Total elapsed time for evaluating the model: {:.8f}\n".format(test_time))
 
-        report(stats,"K-Nearest Neighbor",n)
-        
+        rp.printReport("knn",n)
     # Best model is defined as the one either with almost similiar training score and testing score 
     # or simply best accuracies in both set
     best_model_index = findBestModel(training_accuracy,testing_accuracy)
@@ -335,12 +310,12 @@ if __name__ == "__main__":
         testing_score = knn.evaluate(y_test,test_pred)
         testing_accuracy.append(testing_score)
 
-        stats = doStatistics(n,train_pred,training_score,test_pred,testing_score)
+        rp.doStatistics(['knn',n],train_pred,training_score,test_pred,testing_score)
         print("* Total elapsed time for building & training the model: {:.8f}".format(train_time))
         print("* Total elapsed time for testing against the training model: {:.8f}".format(pred_time))
         print("* Total elapsed time for evaluating the model: {:.8f}\n".format(test_time))
 
-        report(stats,"K-Nearest Neighbor",n)
+        rp.printReport("knn",n)
         
     # Best model is defined as the one either with almost similiar training score and testing score 
     # or simply best accuracies in both set

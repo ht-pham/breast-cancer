@@ -3,24 +3,23 @@ import pandas as pd
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
 
-class FeaturedData:
+from Data import Data
+
+class FeaturedData(Data):
     def __init__(self):
+        super().__init__()
         self.dataset = load_breast_cancer()
         self.df = pd.DataFrame(data=self.dataset.data,columns=self.dataset.feature_names)
         self.df_target = pd.Series(self.dataset.target)
 
     def desc(self):
-        '''
-        This function is to simply print out general information of the dataset
-        '''
-        print("Description of dataset:\n",self.dataset.DESCR[:200])
-        print("Keys in the dataset:\n", self.dataset.keys())
-        print("Number of data points & features:\n", self.dataset.data.shape)
-        print("Feature names:\n",self.dataset.feature_names)
-        print("Sample counts per class:\n",
-              {n: v for n, v in zip(self.dataset.target_names, np.bincount(self.dataset.target))})
+        super().desc()
+
     def getLabels(self):
-        return self.df_target
+        super().getLabels()
+    
+    def split(self):
+        return super().split()
     
     def dropFeatures(self,cols=['radius error','texture error','perimeter error','area error','smoothness error',
                       'compactness error','concavity error','concave points error','symmetry error',
@@ -31,9 +30,6 @@ class FeaturedData:
         
         #return self.df
         
-    def split(self):
-        X_train, X_test, y_train, y_test = train_test_split(self.df,self.df_target, random_state=0)
-        return X_train, X_test, y_train, y_test
     
     
 

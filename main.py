@@ -11,27 +11,6 @@ from SVMModel import SVMModel
 from DecisionTree import Tree
 from FeaturedData import FeaturedData
 
-
-def findBestModel(train_acc,test_acc):
-    best_train = train_acc.index(max(train_acc))
-    best_test = test_acc.index(max(test_acc))
-    if best_test == best_train: # ideal case
-        return best_test
-    else: # average case (i.e. no overfitting or underfitting)
-        ave_train = mean(train_acc)
-        ave_test = mean(test_acc)
-        print("Average Train Accuracy: {:.2f}%.".format(ave_train))
-        print("Average Test Accuracy: {:.2f}%.".format(ave_test))
-        for i in range(0,len(train_acc),1):
-            train_gap = train_acc[i]-ave_train
-            test_gap = test_acc[i]-ave_test
-            ideal_gap1 = train_gap > 1.0 and train_gap < 3.0 # better than ave
-            ideal_gap2 = test_gap > 1.0 and test_gap < 3.0 # better than ave
-            if ideal_gap1 or ideal_gap2 and abs(train_acc[i]-test_acc[i])<1.0:
-                best_model_index = i
-        return best_model_index
-    
-
 if __name__ == "__main__":
     # Print data description
     dataset = Data()
@@ -68,47 +47,17 @@ if __name__ == "__main__":
     rp.cleanUp('knn')
         
     ### This is SVM model
-    #svm.desc()
     print('*','_'*30,"Support Vector Machine",'_'*30,'*')
-    #X_train,X_test,y_train,y_test = svm.split()
     kernel_settings = ['linear','poly','rbf','sigmoid']
     
     for kernel in kernel_settings:
         # Stage 1: Train/Fit data into model
-        print('* Start training ')
-        start = time()
         svm.train(kernel,X_train,y_train)
-        end = time()
-        print('* Finished training')
-        print("Total elapsed time for training: {:.8f}\n".format(end-start))
-        
-        # Stage 2: (still training) Make prediction against training
-        print('* Predicting on training data...')
-        start = time()
-        train_pred = svm.pred(X_train)
-        end = time()
-        print('* Finished predicting ')
-        print("Total elapsed time for predicting all datapoints: {:.8f}\n".format(end-start))
-        ## Evaluate the predicted results against training set
-        train_accuracy = rp.calculateMetrics(y_train,train_pred)
-        rp.record('SVM','train',train_accuracy[0])
-        rp.record('SVM','train error',train_accuracy[1])
-        #svm.calculateMetrics('train',y_train,train_pred)
-        #rp.record("SVM",'train',svm.getScore('train'))
-        
-        # Stage 3: Evaluate against testing set
-        print('* Predicting against testing set...')
-        start = time()
-        test_pred = svm.pred(X_test)
-        end = time()
-        print('* Finished predicting')
-        print("Total elapsed time for testing: {:.8f}\n".format(end-start))
-        ## Evaluate the predicted results against testing set
-        test_accuracy = rp.calculateMetrics(y_test,test_pred)
-        rp.record('SVM','test',test_accuracy[0])
-        rp.record('SVM','test error',test_accuracy[1])
-        #svm.calculateMetrics('test',y_test,test_pred)
-        #rp.record("SVM",'test',svm.getScore('test'))
+        # Stage 2: Predict & Test
+        train_pred = svm.pred(X_train,'train')
+        test_pred = svm.pred(X_test,'test')
+        # Evaluate
+        train_accuracy, test_accuracy = rp.evaluate('SVM',[y_train,train_pred],[y_test,test_pred])
         #Report
         rp.doStatistics(['SVM',kernel],train_pred,train_accuracy,test_pred,test_accuracy)
         rp.printReport("SVM",kernel)
@@ -127,12 +76,7 @@ if __name__ == "__main__":
     
     for i in depth_settings:
         #Train
-        start = time()
         tree.train(i,X_train,y_train)
-        if i == None:
-            i = 'Infinite'
-        print("* Finished training model with {}-depth within {:.8f}".format(i,time()-start))
-        
         # Predict
         train_pred = tree.pred(X_train,'train')
         test_pred = tree.pred(X_test,'test')

@@ -29,8 +29,12 @@ class Tree:
         else:
             self.max_depth = None
             self.classifer = DecisionTreeClassifier(random_state=0)
-
+        
+        start = time()
         self.classifer.fit(X_train,y_train)
+        if max_depth == None:
+            max_depth = 'Infinite'
+        print("* Finished training model with {}-depth within {:.8f}".format(max_depth,time()-start))
 
     def pred(self,dataset,set_type):
         '''

@@ -7,6 +7,10 @@ from math import sqrt
 class Report:
     def __init__(self):
         #e.g. stats = { ml_algo:{'1':{'train':{'benign':x,'malignant':y, 'score':90%},'test':{'score':91%,etc.}}}
+        self.ml_models = {'knn':['1-nn','2-nn','3-nn','4-nn','5-nn','6-nn','7-nn','8-nn','9-nn','10-knn'],
+                          'SVM':['linear kernel','poly kernel','rbf kernel','sigmoid kernel'],
+                          'DT':['Infinite-deep','10-deep','9-deep','8-deep','7-deep',
+                                '6-deep','5-deep','4-deep','3-deep','2-deep','1-deep']}
         self.stats = {'knn':{},'SVM':{},'DT':{}}
         self.train_stats = {'knn':{},'SVM':{},'DT':{}}
         self.test_stats = {'knn':{},'SVM':{},'DT':{}}
@@ -33,7 +37,6 @@ class Report:
             return self.stats[ml_model][param]
 
     def getRecord(self,ml_model,param,set_type):
-
         if set_type == 'train':
             return self.training_accuracy[ml_model][param]
         elif set_type == 'test':
@@ -109,12 +112,9 @@ class Report:
 
         best_train = train_acc.index(max(train_acc))
         best_test = test_acc.index(max(test_acc))
-        print("Best Training Accuracy is {}% at {}".format(train_acc[best_train],best_train+1))
-        print("Best Testing Accuracy is {}% at {}".format(test_acc[best_test],best_test+1))
-        
-        rmse1 = self.training_error[ml_model]
-        rmse2 = self.testing_error[ml_model]
-        
+        print("Best Training Accuracy is {}% at {} model".format(train_acc[best_train],self.ml_models[ml_model][best_train]))
+        print("Best Testing Accuracy is {}% at {} model".format(test_acc[best_test],self.ml_models[ml_model][best_test]))
+         
         ideal_gap1 = (train_acc[best_train]-train_acc[0])
         ideal_gap2 = (test_acc[best_test]-test_acc[0])
         second_best = best_test
@@ -134,24 +134,15 @@ class Report:
                     #second_best = i
                     near_best1 = (train_acc[best_train]-train_acc[i])
                     near_best2 = (test_acc[best_test]-test_acc[i])
-                
-                    #ideal_rmse = (rmse1[i]+rmse2[i]) < 0.6
-
+            
                     if (ideal_gap1 > near_best1 or ideal_gap2 > near_best2): 
                         #second best model is at index i
                         ideal_gap1 = near_best1
                         ideal_gap2 = near_best2
                         second_best = i
                 
-                """ if (ave_gap1 or ave_gap2) and normal_fitting: # if (better than ave) is true
-                    # then either when accuracy is closer to best
-                    best_model_index = second_best """
-            #best_model_index = round((best_test+best_train)/2)
             return second_best
         
     def cleanUp(self,ml_model):
         self.training_accuracy[ml_model] = [] #restart record for the next ML model version
         self.testing_accuracy[ml_model] = [] #restart record for the next ML model version
-
-
-    

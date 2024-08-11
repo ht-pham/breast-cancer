@@ -1,3 +1,4 @@
+from time import time
 import numpy as np
 import pandas as pd
 from sklearn.datasets import load_breast_cancer
@@ -28,14 +29,30 @@ class SVMModel:
         if kernel != self.kernel:
             self.kernel = kernel
             self.classifer = SVC(kernel=self.kernel,random_state=0)
+        
+        print('* Start training ')
+        start = time()
         self.classifer.fit(X_train,y_train)
-        #return self.classifer
+        end = time()
+        print('* Finished training')
+        print("Total elapsed time for training: {:.8f}\n".format(end-start))
 
-    def pred(self,dataset):
+    def pred(self,dataset,set_type):
         '''
         This function is to make prections on the given dataset
         '''
-        return self.classifer.predict(dataset)
+        if set_type =='train':
+            print("* Start predicting against training set")
+        else:
+            print("* Start predicting against testing set")
+        start = time()
+        y_pred = self.classifer.predict(dataset)
+        end = time()
+        pred_time = end - start
+        print("* Done with the current stage")
+        print("* Total elapsed time: {:.8f}".format(pred_time))
+
+        return y_pred
 
     def evaluate(self,set_type,actual,predicted):
         '''

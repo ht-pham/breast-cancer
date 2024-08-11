@@ -49,6 +49,7 @@ So far, Decision Tree with Depth of 5 is the best ML approach to this categorica
 | 4-Nearest Neighbors                 |       92.25 %       |       92.31%       |
 
 
+
 3. **Case 3**: Major features and the error values in use; outliers are removed (i.e. 10 features dropped)
 > as of now, only knn is used. Average Train Accuracy: 91.39%. Average Test Accuracy: 88.81%.
 

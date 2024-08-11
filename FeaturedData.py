@@ -8,18 +8,15 @@ from Data import Data
 class FeaturedData(Data):
     def __init__(self):
         super().__init__()
-        self.dataset = load_breast_cancer()
-        self.df = pd.DataFrame(data=self.dataset.data,columns=self.dataset.feature_names)
-        self.df_target = pd.Series(self.dataset.target)
 
     def desc(self):
         super().desc()
 
     def getLabels(self):
-        super().getLabels()
+        return super().getLabels()
     
-    def split(self):
-        return super().split()
+    def split(self,state):
+        return super().split(state)
     
     def dropFeatures(self,cols=['radius error','texture error','perimeter error','area error','smoothness error',
                       'compactness error','concavity error','concave points error','symmetry error',

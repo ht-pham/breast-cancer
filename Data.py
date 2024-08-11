@@ -13,15 +13,17 @@ class Data:
         '''
         This function is to simply print out general information of the dataset
         '''
+        print('*'*100)
         print("Description of dataset:\n",self.dataset.DESCR[:200])
         print("Keys in the dataset:\n", self.dataset.keys())
         print("Number of data points & features:\n", self.dataset.data.shape)
         print("Feature names:\n",self.dataset.feature_names)
         print("Sample counts per class:\n",
               {n: v for n, v in zip(self.dataset.target_names, np.bincount(self.dataset.target))})
+        print('*'*100)
     def getLabels(self):
         return self.df_target
     
-    def split(self):
-        X_train, X_test, y_train, y_test = train_test_split(self.df,self.df_target, random_state=0)
+    def split(self,random=0,Stratify=None):
+        X_train, X_test, y_train, y_test = train_test_split(self.df,self.df_target,stratify=Stratify,random_state=random)
         return X_train, X_test, y_train, y_test

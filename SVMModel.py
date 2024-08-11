@@ -20,24 +20,7 @@ class SVMModel:
                 'score':0
                     }
         }
-    def desc(self):
-        '''
-        This function is to simply print out general information of the dataset
-        '''
-        print("Description of dataset:\n",self.dataset.DESCR[:200])
-        print("Keys in the dataset:\n", self.dataset.keys())
-        print("Number of data points & features:\n", self.dataset.data.shape)
-        print("Feature names:\n",self.dataset.feature_names)
-        print("Sample counts per class:\n",
-              {n: v for n, v in zip(self.dataset.target_names, np.bincount(self.dataset.target))})
-
-    def split(self):
-        '''
-        This function is to split dataset into 4 groups with 2 for training and other 2 for testing
-        '''
-        X_train, X_test, y_train, y_test = train_test_split(self.dataset['data'],self.dataset['target'], random_state=0)
-        return X_train, X_test, y_train, y_test
-
+    
     def train(self,kernel,X_train,y_train):
         '''
         This function is to build the model with training dataset
@@ -61,3 +44,8 @@ class SVMModel:
         self.evaluation[set_type]['Confusion Matrix'] = confusion_matrix(actual,predicted)
         self.evaluation[set_type]['score'] = round(accuracy_score(actual,predicted)*100,2)
         #return self.evaluation
+    def getMatrix(self, set_type):
+        return self.evaluation[set_type]['Confusion Matrix']
+
+    def getScore(self,set_type):
+        return self.evaluation[set_type]['score']

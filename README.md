@@ -46,7 +46,7 @@ So far, Decision Tree with Depth of 5 is the best ML approach to this categorica
 
 | Best Model                          | Training Accuracy % | Testing Accuracy % |
 | :-----------------------------------| :-----------------: | :----------------: |
-| 7-Nearest Neighbors                 |       89.67 %       |       90.21%       |
+| 4-Nearest Neighbors                 |       92.25 %       |       92.31%       |
 
 
 3. **Case 3**: Major features and the error values in use; outliers are removed (i.e. 10 features dropped)
@@ -54,4 +54,4 @@ So far, Decision Tree with Depth of 5 is the best ML approach to this categorica
 
 | Best Model                          | Training Accuracy % | Testing Accuracy % |
 | :-----------------------------------| :-----------------: | :----------------: |
-| 3-Nearest Neighbors                 |       92.96 %       |       90.21%       |
+| 3-Nearest Neighbors                 |       91.31 %       |       92.31%       |

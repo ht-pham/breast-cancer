@@ -187,7 +187,7 @@ if __name__ == "__main__":
         rp.printReport('DT',i)
 
     id = rp.findBestModel('DT')
-    depth = 0
+    #depth = 0
     if id==0:
         depth="Infinite"
     else:
@@ -244,7 +244,7 @@ if __name__ == "__main__":
     # Best model is defined as the one either with almost similiar training score and testing score 
     # or simply best accuracies in both set
     id = rp.findBestModel("knn")
-    print("Best kNN Model is",str(id+1)+"-nearest neighbors with"
+    print("Best kNN Model for dataset with only 10 selected features is",str(id+1)+"-nearest neighbors with"
           ,rp.getRecord("knn",id,'train'),"% of accuracy in training and"
           ,rp.getRecord("knn",id,'test'),"% of accuracy in testing")
     print('*'*100)
@@ -296,7 +296,7 @@ if __name__ == "__main__":
     # Best model is defined as the one either with almost similiar training score and testing score 
     # or simply best accuracies in both set
     i = rp.findBestModel("knn")
-    print("Best kNN Model is",str(i+1)+"-nearest neighbors with"
+    print("Best kNN Model for dataset with 20 selected features is",str(i+1)+"-nearest neighbors with"
           ,rp.getRecord("knn",i,'train'),"% of accuracy in training and"
           ,rp.getRecord("knn",i,'test'),"% of accuracy in testing")
     print('*'*100)

@@ -89,28 +89,52 @@ class Report:
     def findBestModel(self,ml_model):
         train_acc = self.training_accuracy[ml_model]
         test_acc = self.testing_accuracy[ml_model]
+        ave_train = mean(train_acc)
+        ave_test = mean(test_acc)
+        print("Average Train Accuracy: {:.2f}%.".format(ave_train))
+        print("Average Test Accuracy: {:.2f}%.".format(ave_test))
+
         best_train = train_acc.index(max(train_acc))
         best_test = test_acc.index(max(test_acc))
+        print("Best Training Accuracy is {}% at {}".format(train_acc[best_train],best_train+1))
+        print("Best Testing Accuracy is {}% at {}".format(test_acc[best_test],best_test+1))
+        
         rmse1 = self.training_error[ml_model]
         rmse2 = self.testing_error[ml_model]
+        
+        ideal_gap1 = (train_acc[best_train]-train_acc[0])
+        ideal_gap2 = (test_acc[best_test]-test_acc[0])
+        second_best = best_test
+
         if best_test == best_train: # ideal case
             return best_test
-        else: # average case (i.e. no overfitting or underfitting)
-            ave_train = mean(train_acc)
-            ave_test = mean(test_acc)
-            print("Average Train Accuracy: {:.2f}%.".format(ave_train))
-            print("Average Test Accuracy: {:.2f}%.".format(ave_test))
-            for i in range(0,len(train_acc),1):
-                train_gap = train_acc[i]-ave_train
-                test_gap = test_acc[i]-ave_test
-                ideal_gap1 = train_gap > 0.5 and train_gap <= 3.0 # better than ave
-                ideal_gap2 = test_gap > 0.5 and test_gap <= 3.0 # better than ave
-                ideal_gap3 = abs(train_acc[i]-test_acc[i])<5
-                ideal_rmse = (rmse1[i]+rmse2[i]) < 1
+        else: # better than average case (i.e. no overfitting or underfitting)
+            for i in range(1,len(train_acc),1):
+                better_train = train_acc[i]-ave_train
+                better_test = test_acc[i]-ave_test 
+                ave_gap1 = better_train > 0.0 # better than ave
+                ave_gap2 = better_test > 0.0 # better than ave
+                normal_fitting = abs(train_acc[i]-test_acc[i])<2.0
                 
-                if (ideal_gap1 or ideal_gap2 or ideal_gap3) and ideal_rmse:
-                    best_model_index = i
-            return best_model_index
+                if (ave_gap1 or ave_gap2) and normal_fitting: # if (better than ave) is true
+                    # then either when accuracy is closer to best
+                    #second_best = i
+                    near_best1 = (train_acc[best_train]-train_acc[i])
+                    near_best2 = (test_acc[best_test]-test_acc[i])
+                
+                    #ideal_rmse = (rmse1[i]+rmse2[i]) < 0.6
+
+                    if (ideal_gap1 > near_best1 or ideal_gap2 > near_best2): 
+                        #second best model is at index i
+                        ideal_gap1 = near_best1
+                        ideal_gap2 = near_best2
+                        second_best = i
+                
+                """ if (ave_gap1 or ave_gap2) and normal_fitting: # if (better than ave) is true
+                    # then either when accuracy is closer to best
+                    best_model_index = second_best """
+            #best_model_index = round((best_test+best_train)/2)
+            return second_best
         
     def cleanUp(self,ml_model):
         self.training_accuracy[ml_model] = [] #restart record for the next ML model version

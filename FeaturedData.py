@@ -15,8 +15,8 @@ class FeaturedData(Data):
     def getLabels(self):
         return super().getLabels()
     
-    def split(self,state):
-        return super().split(state)
+    def split(self,random_state,Stratify=None):
+        return super().split(random_state,Stratify=Stratify)
     
     def dropFeatures(self,cols=['radius error','texture error','perimeter error','area error','smoothness error',
                       'compactness error','concavity error','concave points error','symmetry error',

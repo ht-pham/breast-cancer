@@ -33,6 +33,7 @@ class Report:
             return self.stats[ml_model][param]
 
     def getRecord(self,ml_model,param,set_type):
+
         if set_type == 'train':
             return self.training_accuracy[ml_model][param]
         elif set_type == 'test':
@@ -42,14 +43,26 @@ class Report:
         else:
             return self.testing_error[ml_model][param]
         
-    def evaluate(self,true_labels,predicted_set):
+    def calculateMetrics(self,true_labels,predicted_set):
         '''
         This function is to compare the predicted labels with the actual labels and calculate the accuracy score
         '''
         score = round(accuracy_score(true_labels,predicted_set)*100,2)
         error = round(sqrt(mean_squared_error(true_labels,predicted_set)),4)
         return [score,error]
-        
+    
+    def evaluate(self,ml_model,train_ys,test_ys):
+        # Evaluate training's predicted values
+        train_accuracy = self.calculateMetrics(train_ys[0],train_ys[1])
+        self.record(ml_model,'train',train_accuracy[0])
+        self.record(ml_model,'train error',train_accuracy[1])
+        # Evaluate testing's predicted values
+        test_accuracy = self.calculateMetrics(test_ys[0],test_ys[1])
+        self.record(ml_model,'test',test_accuracy[0])
+        self.record(ml_model,'test error',test_accuracy[1])
+
+        return train_accuracy,test_accuracy
+
     def doStatistics(self,params,train_predicted,train_score,test_predicted,test_score):
         #stats = {} #e.g. stats = { '1':{'train':{'benign':x,'malignant':y, 'score':90%},'test':{'score':91%,etc.}}
         labels = ['malignant','benign']

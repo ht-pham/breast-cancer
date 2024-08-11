@@ -46,44 +46,16 @@ if __name__ == "__main__":
 
     ### This is kNN model
     print('*','_'*30,"k-nearest neighbors",'_'*30,'*')
-    
     neighbor_settings = range(1,11,1)
-    
     for n in neighbor_settings:
         # Build the model
-        print("* Start building & training")
-        start = time()
         knn.train(n,X_train,y_train)
-        end = time()
-        train_time = end - start
-        print("* Done building & training")
         # Predict
-        print("* Start predicting against training set")
-        start = time()
-        train_pred = knn.pred(X_train)
-        end = time()
-        pred_time = end - start
-        print("* Done with training stage")
-        train_accuracy = rp.evaluate(y_train,train_pred)
-        rp.record('knn','train',train_accuracy[0])
-        rp.record('knn','train error',train_accuracy[1])
+        train_pred = knn.pred(X_train,'train')
+        test_pred = knn.pred(X_test,'test')
         # Evaluate
-        print("* Start evaluating")
-        start = time()
-        test_pred = knn.pred(X_test)
-        end = time()
-        test_time = end - start
-        print("* Done with evaluation")
-        test_accuracy = rp.evaluate(y_test,test_pred)
-        rp.record('knn','test',test_accuracy[0])
-        rp.record('knn','test error',test_accuracy[1])
-
+        train_accuracy, test_accuracy = rp.evaluate('knn',[y_train,train_pred],[y_test,test_pred])
         rp.doStatistics(['knn',n],train_pred,train_accuracy,test_pred,test_accuracy)
-
-        print("* Total elapsed time for building & training the model: {:.8f}".format(train_time))
-        print("* Total elapsed time for testing against the training model: {:.8f}".format(pred_time))
-        print("* Total elapsed time for evaluating the model: {:.8f}\n".format(test_time))
-
         rp.printReport("knn",n)
         
     # Best model is defined as the one either with almost similiar training score and testing score 
@@ -118,10 +90,10 @@ if __name__ == "__main__":
         print('* Finished predicting ')
         print("Total elapsed time for predicting all datapoints: {:.8f}\n".format(end-start))
         ## Evaluate the predicted results against training set
-        train_accuracy = rp.evaluate(y_train,train_pred)
+        train_accuracy = rp.calculateMetrics(y_train,train_pred)
         rp.record('SVM','train',train_accuracy[0])
         rp.record('SVM','train error',train_accuracy[1])
-        #svm.evaluate('train',y_train,train_pred)
+        #svm.calculateMetrics('train',y_train,train_pred)
         #rp.record("SVM",'train',svm.getScore('train'))
         
         # Stage 3: Evaluate against testing set
@@ -132,10 +104,10 @@ if __name__ == "__main__":
         print('* Finished predicting')
         print("Total elapsed time for testing: {:.8f}\n".format(end-start))
         ## Evaluate the predicted results against testing set
-        test_accuracy = rp.evaluate(y_test,test_pred)
+        test_accuracy = rp.calculateMetrics(y_test,test_pred)
         rp.record('SVM','test',test_accuracy[0])
         rp.record('SVM','test error',test_accuracy[1])
-        #svm.evaluate('test',y_test,test_pred)
+        #svm.calculateMetrics('test',y_test,test_pred)
         #rp.record("SVM",'test',svm.getScore('test'))
         #Report
         rp.doStatistics(['SVM',kernel],train_pred,train_accuracy,test_pred,test_accuracy)
@@ -160,39 +132,21 @@ if __name__ == "__main__":
         if i == None:
             i = 'Infinite'
         print("* Finished training model with {}-depth within {:.8f}".format(i,time()-start))
-        print("Doing some predictions")
-
-        #Predict
-        print("* Predicting with sample sets")
-        start = time()
-        train_pred = tree.pred(X_train)
-        end = time()
-        print("... training set: done within {:.8f}".format(end-start))
-        #Test
-        start = time()
-        test_pred = tree.pred(X_test)
-        end = time()
-        print("... testing set: done within {:.8f}".format(end-start))
-
-        #Evaluate
-        train_accuracy = rp.evaluate(y_train,train_pred)
-        rp.record('DT','train',train_accuracy[0])
-        rp.record('DT','train error',train_accuracy[1])
-
-        test_accuracy = rp.evaluate(y_test,test_pred)
-        rp.record('DT','test',test_accuracy[0])
-        rp.record('DT','test error',test_accuracy[1])
+        
+        # Predict
+        train_pred = tree.pred(X_train,'train')
+        test_pred = tree.pred(X_test,'test')
+        # Evaluate
+        train_accuracy, test_accuracy = rp.evaluate('DT',[y_train,train_pred],[y_test,test_pred])
 
         rp.doStatistics(['DT',i],train_pred,train_accuracy,test_pred,test_accuracy)
         rp.printReport('DT',i)
 
     id = rp.findBestModel('DT')
-    #depth = 0
     if id==0:
         depth="Infinite"
     else:
         depth = depth_settings[id]
-    #print(rp.getRecord('knn',1,'train'))
     print("Best Decision Tree is the {}-deep Decision Tree with {:.2f}% accuracy in training, and {:.2f}% accuracy in testing."
           .format(depth,rp.getRecord('DT',id,'train'),rp.getRecord('DT',id,'test')))
     
@@ -206,39 +160,13 @@ if __name__ == "__main__":
     
     for n in neighbor_settings:
         # Build the model
-        print("* Start building & training")
-        start = time()
         knn.train(n,X_train,y_train)
-        end = time()
-        train_time = end - start
-        print("* Done building & training")
         # Predict
-        print("* Start predicting against training set")
-        start = time()
-        train_pred = knn.pred(X_train)
-        end = time()
-        pred_time = end - start
-        print("* Done with training stage")
-        train_accuracy = rp.evaluate(y_train,train_pred)
-        rp.record('knn','train',train_accuracy[0])
-        rp.record('knn','train error',train_accuracy[1])
+        train_pred = knn.pred(X_train,'train')
+        test_pred = knn.pred(X_test,'test')
         # Evaluate
-        print("* Start evaluating")
-        start = time()
-        test_pred = knn.pred(X_test)
-        end = time()
-        test_time = end - start
-        print("* Done with evaluation")
-        test_accuracy = rp.evaluate(y_test,test_pred)
-        rp.record('knn','test',test_accuracy[0])
-        rp.record('knn','test error',test_accuracy[1])
-
+        train_accuracy, test_accuracy = rp.evaluate('knn',[y_train,train_pred],[y_test,test_pred])
         rp.doStatistics(['knn',n],train_pred,train_accuracy,test_pred,test_accuracy)
-
-        print("* Total elapsed time for building & training the model: {:.8f}".format(train_time))
-        print("* Total elapsed time for testing against the training model: {:.8f}".format(pred_time))
-        print("* Total elapsed time for evaluating the model: {:.8f}\n".format(test_time))
-
         rp.printReport("knn",n)
 
     # Best model is defined as the one either with almost similiar training score and testing score 
@@ -259,38 +187,13 @@ if __name__ == "__main__":
     
     for n in neighbor_settings:
         # Build the model
-        print("* Start building & training")
-        start = time()
         knn.train(n,X_train,y_train)
-        end = time()
-        train_time = end - start
-        print("* Done building & training")
         # Predict
-        print("* Start predicting against training set")
-        start = time()
-        train_pred = knn.pred(X_train)
-        end = time()
-        pred_time = end - start
-        print("* Done with training stage")
-        train_accuracy = rp.evaluate(y_train,train_pred)
-        rp.record('knn','train',train_accuracy[0])
-        rp.record('knn','train error',train_accuracy[1])
+        train_pred = knn.pred(X_train,'train')
+        test_pred = knn.pred(X_test,'test')
         # Evaluate
-        print("* Start evaluating")
-        start = time()
-        test_pred = knn.pred(X_test)
-        end = time()
-        test_time = end - start
-        print("* Done with evaluation")
-        test_accuracy = rp.evaluate(y_test,test_pred)
-        rp.record('knn','test',test_accuracy[0])
-        rp.record('knn','test error',test_accuracy[1])
-
+        train_accuracy, test_accuracy = rp.evaluate('knn',[y_train,train_pred],[y_test,test_pred])
         rp.doStatistics(['knn',n],train_pred,train_accuracy,test_pred,test_accuracy)
-
-        print("* Total elapsed time for building & training the model: {:.8f}".format(train_time))
-        print("* Total elapsed time for testing against the training model: {:.8f}".format(pred_time))
-        print("* Total elapsed time for evaluating the model: {:.8f}\n".format(test_time))
         rp.printReport("knn",n)
         
     # Best model is defined as the one either with almost similiar training score and testing score 

@@ -1,4 +1,5 @@
 from math import sqrt
+from time import time
 import numpy as np
 import pandas as pd
 from sklearn.datasets import load_breast_cancer
@@ -12,39 +13,38 @@ class KNNModel:
         self.n_neighbors = 1
         self.classifer = KNeighborsClassifier(n_neighbors=self.n_neighbors)
 
-    def desc(self):
-        '''
-        This function is to simply print out general information of the dataset
-        '''
-        print("Description of dataset:\n",self.dataset.DESCR[:200])
-        print("Keys in the dataset:\n", self.dataset.keys())
-        print("Number of data points & features:\n", self.dataset.data.shape)
-        print("Feature names:\n",self.dataset.feature_names)
-        print("Sample counts per class:\n",
-              {n: v for n, v in zip(self.dataset.target_names, np.bincount(self.dataset.target))})
-
-    def split(self):
-        '''
-        This function is to split dataset into 4 groups with 2 for training and other 2 for testing
-        '''
-        X_train, X_test, y_train, y_test = train_test_split(self.dataset['data'],self.dataset['target'], random_state=0)
-        return X_train, X_test, y_train, y_test
-
     def train(self,neighbors,features_set,target_set):
         '''
         This function is to build the model with training dataset
         '''
+        print("* Start building & training")
+        start = time()
         if neighbors != self.n_neighbors:
             self.n_neighbors = neighbors
             self.classifer = KNeighborsClassifier(n_neighbors=self.n_neighbors)
         self.classifer.fit(features_set,target_set)
+        end = time()
+        train_time = end - start
+        print("* Done building & training")
+        print("* Total elapsed time: {:.8f}".format(train_time))
         #return self.classifer
 
-    def pred(self,dataset):
+    def pred(self,dataset,set_type):
         '''
         This function is to make prections on the given dataset
         '''
-        return self.classifer.predict(dataset)
+        if set_type =='train':
+            print("* Start predicting against training set")
+        else:
+            print("* Start predicting against testing set")
+        start = time()
+        y_pred = self.classifer.predict(dataset)
+        end = time()
+        pred_time = end - start
+        print("* Done with the current stage")
+        print("* Total elapsed time: {:.8f}".format(pred_time))
+
+        return y_pred
 
     def evaluate(self,true_labels,predicted_set):
         '''

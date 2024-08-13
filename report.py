@@ -11,14 +11,14 @@ class Report:
                           'SVM':['linear kernel','poly kernel','rbf kernel','sigmoid kernel'],
                           'DT':['Infinite-deep','10-deep','9-deep','8-deep','7-deep',
                                 '6-deep','5-deep','4-deep','3-deep','2-deep','1-deep']}
-        self.stats = {'knn':{},'SVM':{},'DT':{}}
-        self.train_stats = {'knn':{},'SVM':{},'DT':{}}
-        self.test_stats = {'knn':{},'SVM':{},'DT':{}}
+        self.stats = {'knn':{},'SVM':{},'DT':{},'NN':{}}
+        self.train_stats = {'knn':{},'SVM':{},'DT':{},'NN':{}}
+        self.test_stats = {'knn':{},'SVM':{},'DT':{},'NN':{}}
 
-        self.training_accuracy = {'knn':[],'SVM':[],'DT':[]}
-        self.testing_accuracy = {'knn':[],'SVM':[],'DT':[]}
-        self.training_error = {'knn':[],'SVM':[],'DT':[]}
-        self.testing_error = {'knn':[],'SVM':[],'DT':[]}
+        self.training_accuracy = {'knn':[],'SVM':[],'DT':[],'NN':[]}
+        self.testing_accuracy = {'knn':[],'SVM':[],'DT':[],'NN':[]}
+        self.training_error = {'knn':[],'SVM':[],'DT':[],'NN':[]}
+        self.testing_error = {'knn':[],'SVM':[],'DT':[],'NN':[]}
 
     def record(self,ml_model,set_type,score):
         if set_type == 'train':

@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 
 class Data:
     def __init__(self):
@@ -27,3 +28,14 @@ class Data:
     def split(self,random=0,Stratify=None):
         X_train, X_test, y_train, y_test = train_test_split(self.df,self.df_target,stratify=Stratify,random_state=random)
         return X_train, X_test, y_train, y_test
+    
+    def standardize(self,X_train,X):
+        scaler = StandardScaler()
+        X_train_std = scaler.fit_transform(X_train)
+        X_test_std = scaler.transform(X)
+        return X_train_std,X_test_std
+        
+    def reshape(self,data):
+        if not isinstance(data,np.ndarray): 
+            data = np.asarray(data)
+        return data.reshape(1,-1)

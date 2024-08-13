@@ -25,7 +25,11 @@ class FeaturedData(Data):
                       'worst symmetry','worst fractal dimension']):
         self.df = self.df.drop(cols,axis="columns")
         
-        #return self.df
+    def standardize(self, set_type, X):
+        return super().standardize(set_type, X)
+    
+    def reshape(self, data):
+        return super().reshape(data)
         
     
     

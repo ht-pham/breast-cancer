@@ -6,6 +6,7 @@ from FeaturedData import FeaturedData
 from KNNModel import KNNModel
 from SVMModel import SVMModel
 from DecisionTree import Tree
+from nn import NN
 
 # Object creations
 # create Report
@@ -16,6 +17,9 @@ dataset = Data()
 knn = KNNModel()
 svm = SVMModel()
 tree = Tree()
+
+#create NN
+
 
 def runKNN(neighbor_settings,X_train,X_test,y_train,y_test):
     for n in neighbor_settings:
@@ -82,6 +86,31 @@ def runDT(depths,X_train,X_test,y_train,y_test):
     print('*'*100)
     rp.cleanUp('DT')
 
+def runNN(X_train,X_test,y_train,y_test):
+    #First step: Standardize data
+    neural = NN()
+    X_train_std,X_test_std = dataset.standardize(X_train,X_test)
+    #Second step: set up layers through keras (already did through NN() obj creation)
+    #Third step: compile the neural network
+    neural.compile()
+    #Fourth step: train
+    neural.train(X_train_std,y_train,0.1,10)
+    #Fifth step: Predict
+    y_learned = neural.predict(X_train_std)
+    y_pred = neural.predict(X_test_std)
+    
+    # Evaluate
+    malignant = sum(1 for x in y_learned if x == 'malignant')
+    benign = sum(1 for x in y_learned if x == 'benign')
+    print('Predictions on train set: (1) malignant: {}, (2) benign: {}'.format(malignant,benign))
+    malignant = sum(1 for x in y_pred if x == 'malignant')
+    benign = sum(1 for x in y_pred if x == 'benign')
+    print('Predictions on test set: (1) malignant: {}, (2) benign: {}'.format(malignant,benign))
+    #train_accuracy, test_accuracy = rp.evaluate('NN',[y_train,y_learned],[y_test,y_pred])
+    train_acc = neural.evaluate(X_train_std,y_train)
+    test_acc = neural.evaluate(X_test_std,y_test)
+    print("Accuracy scores of Train VS Test: {}% <> {}%".format(train_acc,test_acc))
+
 if __name__ == "__main__":
     dataset.desc()
     # Spliting the dataset
@@ -100,6 +129,13 @@ if __name__ == "__main__":
     depth_settings = [None]
     depth_settings[1:]=[i for i in range(10,0,-1)]
     runDT(depth_settings,X_train,X_test,y_train,y_test)
+
+    ### Neural Network
+    dataset = Data()
+    X_train,X_test,y_train,y_test = dataset.split()
+    print('*','_'*30,"Neural Network",'_'*30,'*')
+    runNN(X_train,X_test,y_train,y_test)
+    
     #------------------------------------------------------------------------------------#
     #------------- ML Algorithms with dataset applied feature selection -----------------# 
     dataset = FeaturedData()
@@ -117,6 +153,8 @@ if __name__ == "__main__":
     print('*','_'*30,"Decision Tree",'_'*30,'*')
     X_train,X_test,y_train,y_test = dataset.split(random_state=42,Stratify=dataset.df_target)
     runDT(depth_settings,X_train,X_test,y_train,y_test)
+    #------------ Using Neural Network
+    
 
     #---- Case 2: Drop outliers only
     dataset = FeaturedData()
@@ -135,7 +173,8 @@ if __name__ == "__main__":
     X_train,X_test,y_train,y_test = dataset.split(random_state=42,Stratify=dataset.df_target)
     runDT(depth_settings,X_train,X_test,y_train,y_test)
 
-
+    #--------------- Neural Networks ------------------#
+    
 
 
 

@@ -40,7 +40,7 @@ So far, Linear Support Vector Machine is the best ML approach to this categorica
 | 8-Nearest Neighbors                 |       94.13 %       |       94.41%       |  Right               |
 | Linear Support Vector Machine       |       96.71 %       |       95.8 %       |  Right               |
 | Decision Tree with Depth of 5       |       99.53 %       |       95.10 %      |  Light Overfitting   |
-| Neural Network with 3 layers        |       98.83 %       |       96.5  %      |  Right               |
+| Neural Network with 3 layers        |       98.83 %       |       96.5 %       |  Right               |
 
 2. **Case 2**: Only major features in use, errors and outliers are removed (i.e. 20 features dropped)
    

@@ -8,6 +8,7 @@ from SVMModel import SVMModel
 from DecisionTree import Tree
 from nn import NN
 
+
 # Object creations
 # create Report
 rp = Report()
@@ -86,10 +87,10 @@ def runDT(depths,X_train,X_test,y_train,y_test):
     print('*'*100)
     rp.cleanUp('DT')
 
-def runNN(X_train,X_test,y_train,y_test):
+def runNN(neural,X_train_std,X_test_std,y_train,y_test):
     #First step: Standardize data
-    neural = NN()
-    X_train_std,X_test_std = dataset.standardize(X_train,X_test)
+    #neural = NN()
+    
     #Second step: set up layers through keras (already did through NN() obj creation)
     #Third step: compile the neural network
     neural.compile()
@@ -134,7 +135,9 @@ if __name__ == "__main__":
     dataset = Data()
     X_train,X_test,y_train,y_test = dataset.split()
     print('*','_'*30,"Neural Network",'_'*30,'*')
-    runNN(X_train,X_test,y_train,y_test)
+    nn = NN()
+    X_train_std,X_test_std = dataset.standardize(X_train,X_test)
+    runNN(nn,X_train_std,X_test_std,y_train,y_test)
     
     #------------------------------------------------------------------------------------#
     #------------- ML Algorithms with dataset applied feature selection -----------------# 
@@ -154,7 +157,9 @@ if __name__ == "__main__":
     X_train,X_test,y_train,y_test = dataset.split(random_state=42,Stratify=dataset.df_target)
     runDT(depth_settings,X_train,X_test,y_train,y_test)
     #------------ Using Neural Network
-    
+    nn1 = NN(input_shape=(10,))
+    X_train_std,X_test_std = dataset.standardize(X_train,X_test)
+    runNN(nn1,X_train_std,X_test_std,y_train,y_test)
 
     #---- Case 2: Drop outliers only
     dataset = FeaturedData()
@@ -174,6 +179,9 @@ if __name__ == "__main__":
     runDT(depth_settings,X_train,X_test,y_train,y_test)
 
     #--------------- Neural Networks ------------------#
+    nn2 = NN(input_shape=(20,))
+    X_train_std,X_test_std = dataset.standardize(X_train,X_test)
+    runNN(nn2,X_train_std,X_test_std,y_train,y_test)
     
 
 

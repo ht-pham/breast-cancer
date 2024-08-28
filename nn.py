@@ -5,10 +5,10 @@ from tensorflow import keras
 #from sklearn.metrics import accuracy_score
 
 class NN:
-    def __init__(self):
+    def __init__(self,input_shape=(30,)):
         # Setting up layers of the neural networks
         self.model = keras.Sequential([
-                    keras.layers.Flatten(input_shape=(30,)),
+                    keras.layers.Flatten(input_shape=input_shape),
                     keras.layers.Dense(20, activation='relu'),
                     keras.layers.Dense(2, activation='sigmoid')
         ])

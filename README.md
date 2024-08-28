@@ -38,9 +38,9 @@ So far, Linear Support Vector Machine is the best ML approach to this categorica
 | Best Model                          | Training Accuracy % | Testing Accuracy % |    Case of Fitting   | 
 | :-----------------------------------| :-----------------: | :----------------: |:---------------------|
 | 8-Nearest Neighbors                 |       94.13 %       |       94.41%       |  Right               |
-| Linear Support Vector Machine       |       96.71 %       |       95.8 %       |  Right               |
+| Linear Support Vector Classifier    |       96.71 %       |       95.8 %       |  Right               |
 | Decision Tree with Depth of 5       |       99.53 %       |       95.10 %      |  Light Overfitting   |
-| Neural Network with 3 layers        |       98.83 %       |       96.5 %       |  Right               |
+| Neural Network with 3 layers        |       99.30 %       |       96.5 %       |  Light Overfitting   |
 
 2. **Case 2**: Only major features in use, errors and outliers are removed (i.e. 20 features dropped)
    
@@ -48,10 +48,10 @@ So far, Linear Support Vector Machine is the best ML approach to this categorica
 
 | Best Model                          | Training Accuracy % | Testing Accuracy % |    Case of Fitting   |
 | :-----------------------------------| :-----------------: | :----------------: |:---------------------|
-| 4-Nearest Neighbors                 |       92.25 %       |       92.31%       |  Right               |
-| Linear Support Vector Machine       |       91.31 %       |       94.41 %      |  Light Underfitting  |
+| 4-Nearest Neighbors                 |       92.25 %       |       92.31 %      |  Right               |
+| Linear Support Vector Classifier    |       91.31 %       |       94.41 %      |  Light Underfitting  |
 | Decision Tree with Depth of 2       |       94.13 %       |       92.31 %      |  Light Overfitting   |
-
+| Neural Network with 3 layers        |       95.31 %       |       97.9  %      |  Light Undefitting   |
 
 3. **Case 3**: Major features and the error values in use; outliers are removed (i.e. 10 features dropped)
 > Linear Support Vector Machine is the best ML approach when 20 features in use.
@@ -59,5 +59,6 @@ So far, Linear Support Vector Machine is the best ML approach to this categorica
 | Best Model                          | Training Accuracy % | Testing Accuracy % |   Case of Fitting   |
 | :-----------------------------------| :-----------------: | :----------------: |:--------------------|
 | 3-Nearest Neighbors                 |       91.31 %       |       92.31%       | Right               |
-| Linear Support Vector Machine       |       93.66 %       |       94.41 %      | Right               |
+| Linear Support Vector Classifier    |       93.66 %       |       94.41 %      | Right               |
 | Decision Tree with Depth of 6       |       99.06 %       |       94.41 %      | Overfitting         |
+| Neural Network with 3 layers        |       98.12 %       |       95.1  %      | Light Overfitting   |

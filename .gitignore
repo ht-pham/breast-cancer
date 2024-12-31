@@ -4,3 +4,6 @@ dt_model.pkl
 nn_model.pkl
 knn_model.pkl
 svm_model.pkl
+DecisionTree.py
+KNNModel.py
+SVMModel.py

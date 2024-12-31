@@ -7,3 +7,4 @@ svm_model.pkl
 DecisionTree.py
 KNNModel.py
 SVMModel.py
+report.py

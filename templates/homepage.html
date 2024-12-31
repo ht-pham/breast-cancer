@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breast Cancer Diagnosis Tool</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>Breast Cancer Diagnosis Tool</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/faq">FAQ</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <h2>Empowering healthcare professionals with AI-driven insights</h2>
+            <a href="/upload" class="cta-button">Get Started</a>
+        </section>
+
+        <section class="intro">
+            <h3>Why Choose Our Tool?</h3>
+            <p>Our AI model provides reliable diagnostic predictions for breast cancer, aiding in early detection and treatment planning.</p>
+        </section>
+
+        <section class="upload">
+            <h3>Upload Diagnostic Data</h3>
+            <form action="/predict" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" accept=".csv, .txt, .json" required>
+                <button type="submit">Analyze Now</button>
+            </form>
+        </section>
+
+        <section class="how-it-works">
+            <h3>How It Works</h3>
+            <ol>
+                <li>Upload your diagnostic data.</li>
+                <li>AI processes the data.</li>
+                <li>View detailed results and insights.</li>
+            </ol>
+        </section>
+    </main>
+
+    <footer>
+        <p>Contact us: info@diagnosistool.com</p>
+        <p>© 2024 Breast Cancer Diagnosis Tool. All rights reserved.</p>
+    </footer>
+</body>
+</html>

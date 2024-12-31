@@ -1,5 +1,6 @@
 from math import sqrt
 from time import time
+import joblib
 import numpy as np
 import pandas as pd
 from sklearn.datasets import load_breast_cancer
@@ -23,6 +24,10 @@ class KNNModel:
             self.n_neighbors = neighbors
             self.classifer = KNeighborsClassifier(n_neighbors=self.n_neighbors)
         self.classifer.fit(features_set,target_set)
+        # Save the model to a file
+        joblib.dump(self.classifer, 'knn_model.pkl')
+        print("Model saved to 'knn_model.pkl'")
+        
         end = time()
         train_time = end - start
         print("* Done building & training")

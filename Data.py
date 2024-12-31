@@ -39,3 +39,6 @@ class Data:
         if not isinstance(data,np.ndarray): 
             data = np.asarray(data)
         return data.reshape(1,-1)
+    
+data = Data()
+print(data.df.head(10))

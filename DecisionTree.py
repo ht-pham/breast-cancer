@@ -1,4 +1,5 @@
 from time import time
+import joblib
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
@@ -25,6 +26,10 @@ class Tree:
         
         start = time()
         self.classifer.fit(X_train,y_train)
+        # Save the model to a file
+        joblib.dump(self.classifer, 'dt_model.pkl')
+        print("Model saved to 'dt_model.pkl'")
+        
         if max_depth == None:
             max_depth = 'Infinite'
         print("* Finished training model with {}-depth within {:.8f}".format(max_depth,time()-start))

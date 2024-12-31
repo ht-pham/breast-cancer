@@ -1,2 +1,6 @@
-MLModel.py
+old_main.py
 __pycache__
+dt_model.pkl
+nn_model.pkl
+knn_model.pkl
+svm_model.pkl

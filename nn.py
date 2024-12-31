@@ -1,3 +1,4 @@
+import joblib
 import numpy as np
 import tensorflow as tf
 tf.random.set_seed(3)
@@ -27,6 +28,9 @@ class NN:
 
     def train(self,X_train_std,Y_train,validation_split,epochs):
         self.model.fit(X_train_std,Y_train,validation_split=validation_split,epochs=epochs)
+        # Save the model to a file
+        joblib.dump(self.model, 'nn_model.pkl')
+        print("Model saved to 'nn_model.pkl'")
         #return learned
     
     def predict(self,dataset):

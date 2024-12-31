@@ -1,4 +1,5 @@
 from time import time
+import joblib
 import numpy as np
 import pandas as pd
 from sklearn.datasets import load_breast_cancer
@@ -33,6 +34,10 @@ class SVMModel:
         print('* Start training ')
         start = time()
         self.classifer.fit(X_train,y_train)
+        # Save the model to a file
+        joblib.dump(self.classifer, 'svm_model.pkl')
+        print("Model saved to 'svm_model.pkl'")
+        
         end = time()
         print('* Finished training')
         print("Total elapsed time for training: {:.8f}\n".format(end-start))

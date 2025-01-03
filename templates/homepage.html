@@ -31,9 +31,14 @@
         </section>
 
         <section class="upload">
-            <h3>Upload Diagnostic Data</h3>
-            <form action="/predict" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" accept=".csv, .txt, .json" required>
+            <h3>Enter your mammogram info</h3>
+            <form action="/predict" method="post">
+                {% for feature in features %}
+                <div class="form-group">
+                    <label for="{{ feature }}">{{ feature }}:</label>
+                    <input type="number" id="{{ feature }}" name="{{ feature }}" step="0.01" required>
+                </div>
+                {% endfor %}
                 <button type="submit">Analyze Now</button>
             </form>
         </section>

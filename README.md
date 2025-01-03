@@ -42,18 +42,7 @@ So far, Linear Support Vector Machine is the best ML approach to this categorica
 | 5-Deep Decision Tree with entropy   |       99.30 %       |       94.41 %      |  Light Overfitting   |
 | Neural Network with 3 layers        |       98.83 %       |       95.8 %       |  Light Overfitting   |
 
-2. **Case 2**: Only major features in use, errors and outliers are removed (i.e. 20 features dropped)
-   
-> 4-Deep Decision Tree with entropy criterion is is the best ML approach when only 10 features in used
-
-| Best Model                          | Training Accuracy % | Testing Accuracy % |    Case of Fitting   |
-| :-----------------------------------| :-----------------: | :----------------: |:---------------------|
-| 3-Nearest Neighbors                 |       91.78 %       |       90.21 %      |  Right               |
-| Linear Support Vector Classifier    |       91.31 %       |       94.41 %      |  Light Underfitting  |
-| 4-Deep Decision Tree with entropy   |       95.07 %       |       95.11 %      |  Right               |
-| Neural Network with 3 layers        |       95.54 %       |       97.9  %      |  Light Undefitting   |
-
-3. **Case 3**: Major features and the error values in use; outliers are removed (i.e. 10 features dropped)
+3. **Case 2**: Major features and the error values in use; outliers are removed (i.e. 10 features dropped)
 > Linear Support Vector Machine is the best ML approach when 20 features in use.
 
 | Best Model                          | Training Accuracy % | Testing Accuracy % |   Case of Fitting   |
@@ -63,3 +52,13 @@ So far, Linear Support Vector Machine is the best ML approach to this categorica
 | 1-Deep Decision Tree with gini      |       92.25 %       |       89.51 %      | Right               |
 | Neural Network with 3 layers        |       98.36 %       |       95.1  %      | Light Overfitting   |
 
+3. **Case 3**: Only major features in use, errors and outliers are removed (i.e. 20 features dropped)
+   
+> 4-Deep Decision Tree with entropy criterion is is the best ML approach when only 10 features in used
+
+| Best Model                          | Training Accuracy % | Testing Accuracy % |    Case of Fitting   |
+| :-----------------------------------| :-----------------: | :----------------: |:---------------------|
+| 3-Nearest Neighbors                 |       91.78 %       |       90.21 %      |  Right               |
+| Linear Support Vector Classifier    |       91.31 %       |       94.41 %      |  Light Underfitting  |
+| 4-Deep Decision Tree with entropy   |       95.07 %       |       95.11 %      |  Right               |
+| Neural Network with 3 layers        |       95.54 %       |       97.9  %      |  Light Undefitting   |

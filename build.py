@@ -46,7 +46,7 @@ def build(grid_settings,X_train,X_test,y_train,y_test):
 
     print("Classification Report:")
     print(classification_report(y_test, y_pred))
-def runNN(neural,X_train_std,X_test_std,y_train,y_test):
+def buildNeuralNetwork(neural,X_train_std,X_test_std,y_train,y_test):
     #Second step: set up layers through keras (already did through NN() obj creation)
     #Third step: compile the neural network
     neural.compile()
@@ -55,7 +55,6 @@ def runNN(neural,X_train_std,X_test_std,y_train,y_test):
     #Fifth step: Predict
     y_learned = neural.predict(X_train_std)
     y_pred = neural.predict(X_test_std)
-        
     # Evaluate
     malignant = sum(1 for x in y_learned if x == 'malignant')
     benign = sum(1 for x in y_learned if x == 'benign')
@@ -66,6 +65,7 @@ def runNN(neural,X_train_std,X_test_std,y_train,y_test):
     train_acc = neural.evaluate(X_train_std,y_train)
     test_acc = neural.evaluate(X_test_std,y_test)
     print("Accuracy scores of Train VS Test: {}% <> {}%".format(train_acc,test_acc))
+
 def buildBasicModels(X_train,X_test,y_train,y_test):
     # Set params_grid
     knn_params = {
@@ -104,23 +104,9 @@ buildBasicModels(X_train,X_test,y_train,y_test)
 X_train_std,X_test_std = Data().standardize(X_train,X_test)
 ### Second step: Build the neural network
 neural = NN()
-runNN(neural,X_train_std,X_test_std,y_train,y_test)
+buildNeuralNetwork(neural,X_train_std,X_test_std,y_train,y_test)
 
-dataset = FeaturedData()
-print("_*_*"*10," Case 2: Dataset with 10 selected features","_*_*"*10)
-dataset.dropFeatures() 
-print("*** Dataset has been removed all errors and worst features ","."*50)
-X_train,X_test,y_train,y_test = dataset.split(42)
-
-## Build knn, svm, and decision tree models on new dataset
-buildBasicModels(X_train,X_test,y_train,y_test)
-## Build Neural Network based on the new dataset
-### First step: Standardize data for the network
-X_train_std,X_test_std = dataset.standardize(X_train,X_test)
-nn1 = NN((10,))
-runNN(nn1,X_train_std,X_test_std,y_train,y_test)
-
-print("_*_*"*10," Case 3: Dataset with 20 selected features","_*_*"*10)
+print("_*_*"*10," Case 2: Dataset with 20 selected features","_*_*"*10)
 dataset = FeaturedData()
 outliers = ['worst radius','worst texture','worst perimeter','worst area','worst smoothness',
                 'worst compactness','worst concavity','worst concave points','worst symmetry','worst fractal dimension']
@@ -134,4 +120,18 @@ buildBasicModels(X_train,X_test,y_train,y_test)
 X_train_std,X_test_std = dataset.standardize(X_train,X_test)
 ### Second step: Build the neural network
 nn2 = NN((20,))
-runNN(nn2,X_train_std,X_test_std,y_train,y_test)
+buildNeuralNetwork(nn2,X_train_std,X_test_std,y_train,y_test)
+
+dataset = FeaturedData()
+print("_*_*"*10," Case 3: Dataset with 10 selected features","_*_*"*10)
+dataset.dropFeatures() 
+print("*** Dataset has been removed all errors and worst features ","."*50)
+X_train,X_test,y_train,y_test = dataset.split(42)
+
+## Build knn, svm, and decision tree models on new dataset
+buildBasicModels(X_train,X_test,y_train,y_test)
+## Build Neural Network based on the new dataset
+### First step: Standardize data for the network
+X_train_std,X_test_std = dataset.standardize(X_train,X_test)
+nn1 = NN((10,))
+buildNeuralNetwork(nn1,X_train_std,X_test_std,y_train,y_test)

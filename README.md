@@ -65,5 +65,7 @@ So far, Linear Support Vector Machine is the best ML approach to this categorica
 | Neural Network with 3 layers        |       95.54 %       |       97.9  %      |  Light Undefitting   |
 
 ## Outcomes
-1. Integrated the models from the last case study to a Flask web app.
-![Breast Cancer Diagnosis by AI](https://github.com/ht-pham/ht-pham.github.io/blob/master/images/breast-cancer-app.png?raw=true)
+1. Demonstrated the power of machine learning in medical research by achieving 96% accuracy with various models.
+2. Highlighted the importance of feature engineering and model evaluation techniques in healthcare applications.
+3. Delivered a fully functional web application showcasing both technical and problem-solving skills in machine learning, software engineering, and deployment.
+![Breast Cancer Diagnosis by AI](https://github.com/ht-pham/ht-pham.github.io/blob/master/images/breast-cancer-app.png)

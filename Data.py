@@ -41,7 +41,7 @@ class Data:
         return data.reshape(1,-1)
     
 data = Data()
-data.desc()
+#data.desc()
 print(data.df[['mean radius','mean texture','mean perimeter','mean area','mean smoothness','mean compactness','mean concavity',
  'mean concave points', 'mean symmetry','mean fractal dimension']].head(10))
 print(data.df[['mean smoothness','mean compactness','mean concavity',

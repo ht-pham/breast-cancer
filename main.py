@@ -1,8 +1,7 @@
 from flask import Flask, request, redirect, url_for, render_template
-from sklearn.metrics import confusion_matrix,classification_report, accuracy_score
 import joblib
 import numpy as np
-import pandas as pd
+
 
 # Load the trained ML model
 knn = joblib.load('knn_model.pkl')  
@@ -20,6 +19,14 @@ features = ['Radius','Texture','Perimeter','Area','Smoothness','Compactness','Co
 @app.route("/")
 def welcome():
     return render_template("homepage.html",features=features)
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+@app.route("/faq")
+def faq():
+    return render_template("faq.html")
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -43,8 +50,10 @@ def predict():
     predicts.append(svm.predict(reshaped_input)[0])
     predicts.append(tree.predict(reshaped_input)[0])
     predicts.append(neural.predict(reshaped_input)[0][-1])
-    predicts = list(map(isBenign,predicts))
     
+    res=[castVote(predictions=predicts)]
+    res.extend(list(map(isBenign,predicts)))
+
     """ results = {
         'knn_prediction': knn_prediction,
         'knn_confidence': 85.2,
@@ -60,8 +69,8 @@ def predict():
         'neural_network_accuracy': 94.5
     } """
 
-    html_names = ['knn_prediction','svm_prediction','decision_tree_prediction','neural_network_prediction']
-    results = dict(zip(html_names,predicts))
+    html_names = ['Overall_prediction','knn_prediction','svm_prediction','decision_tree_prediction','neural_network_prediction']
+    results = dict(zip(html_names,res))
     return render_template('result.html', **results)
     
 def isBenign(predicted):
@@ -69,6 +78,12 @@ def isBenign(predicted):
         return "Benign"
     else:
         return "Malignant"
+def castVote(predictions):
+    # use majority vote rather average threshold to conclude because y_pred returns 0 or 1 
+    benign = predictions.count(0)
+    malignant = predictions.count(1)
+    return "Benign" if benign > malignant else "Malignant"
+
 
 # Run the app
 if __name__ == '__main__':

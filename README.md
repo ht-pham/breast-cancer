@@ -13,7 +13,7 @@ The dataset is from *sk-learn*'s dataset.
     * *benign*: 357
 
 ## Exploratory Data Analysis
-As of 08/09, **manual** feature selection has been applied so there are 3 major case study
+**Manual** feature selection has been applied so there are 3 major case study
 1. **Case 1**: No features dropped/removed from training
 2. **Case 2**: Only major features in use, errors and outliers are removed (i.e. 20 features dropped)
 3. **Case 3**: Major features and the error values in use; outliers are removed (i.e. 10 features dropped)
@@ -23,6 +23,7 @@ As of 08/09, **manual** feature selection has been applied so there are 3 major 
 1. **K-Nearest Neighbors** with number of neighbors from 1 to 10
 2. **Suport Vector Machine** with 4 different kernel functions - linear, poly, rbf, and sigmoid
 3. **Decision Tree** with unlimited, 10 or less deep 
+4. **2-layered Neural Network** with ReLU and Sigmoid as activation functions.
 
 All of these ML algorithms and their variances will be applied to 3 case studies.
 
@@ -62,3 +63,7 @@ So far, Linear Support Vector Machine is the best ML approach to this categorica
 | Linear Support Vector Classifier    |       91.31 %       |       94.41 %      |  Light Underfitting  |
 | 4-Deep Decision Tree with entropy   |       95.07 %       |       95.11 %      |  Right               |
 | Neural Network with 3 layers        |       95.54 %       |       97.9  %      |  Light Undefitting   |
+
+## Outcomes
+1. Integrated the models from the last case study to a Flask web app.
+![Breast Cancer Diagnosis by AI](https://github.com/ht-pham/ht-pham.github.io/blob/master/images/breast-cancer-app.png?raw=true)
